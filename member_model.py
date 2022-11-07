@@ -19,3 +19,6 @@ class MemberModel(QAbstractTableModel):
 
     def headerData(self, section, orientation=None, role=None):
         return self._headers[section]
+
+    def rowCount(self, index=None):
+        return len(self._table_data)
