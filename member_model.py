@@ -1,4 +1,4 @@
-from PyQt5.QtCore import QAbstractTableModel
+from PyQt5.QtCore import QAbstractTableModel, Qt
 
 
 class MemberModel(QAbstractTableModel):
@@ -12,7 +12,7 @@ class MemberModel(QAbstractTableModel):
         return self._headers[:]
 
     def insert_row(self):
-        self._table_data.append([])
+        self._table_data.append(["" for _ in self._headers])
 
     def __len__(self):
         return len(self._table_data)
@@ -22,3 +22,10 @@ class MemberModel(QAbstractTableModel):
 
     def rowCount(self, index=None):
         return len(self._table_data)
+
+    def columnCount(self, index=None):
+        return len(self._headers)
+
+    def data(self, index, role):
+        if role == Qt.ItemDataRole.DisplayRole or role == Qt.ItemDataRole.EditRole:
+            return self._table_data[index.row()][index.column()]

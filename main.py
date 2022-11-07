@@ -10,6 +10,8 @@ if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
     window = uic.loadUi(os.path.join(basedir, "mainwindow.ui"))
     model = MemberModel(["Name", "Birth year", "Grade", "Last graded"])
+    model.insert_row()
+    model.insert_row()
     window.table_members.setModel(model)
     window.show()
     app.exec_()

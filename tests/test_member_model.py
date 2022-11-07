@@ -1,3 +1,5 @@
+from PyQt5.QtCore import Qt
+
 from member_model import MemberModel
 
 
@@ -45,3 +47,21 @@ def test_qt_can_get_row_count():
     model.insert_row()
 
     assert model.rowCount() == 2
+
+
+def test_qt_can_get_column_count():
+    headers = ["column1", "column2", "column3"]
+    model = MemberModel(headers=headers)
+
+    assert model.columnCount() == 3
+
+
+def test_qt_can_get_data():
+    headers = ["column1", "column2", "column3"]
+    model = MemberModel(headers=headers)
+
+    model._table_data.append(["one", "two", "three"])
+    model._table_data.append(["four", "five", "six"])
+
+    assert model.data(model.createIndex(0, 0), Qt.ItemDataRole.DisplayRole) == "one"
+    assert model.data(model.createIndex(1, 1), Qt.ItemDataRole.DisplayRole) == "five"
