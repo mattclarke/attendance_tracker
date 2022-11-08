@@ -27,9 +27,17 @@ def test_qt_can_access_headers():
     headers = ["column1", "column2", "column3"]
     model = MemberModel(headers=headers)
 
-    assert model.headerData(0) == headers[0]
-    assert model.headerData(1) == headers[1]
-    assert model.headerData(2) == headers[2]
+    model.insert_row()
+    model.insert_row()
+    model.insert_row()
+
+    assert model.headerData(0, Qt.Horizontal, Qt.DisplayRole) == headers[0]
+    assert model.headerData(1, Qt.Horizontal, Qt.DisplayRole) == headers[1]
+    assert model.headerData(2, Qt.Horizontal, Qt.DisplayRole) == headers[2]
+
+    assert model.headerData(0, Qt.Vertical, Qt.DisplayRole) == "1"
+    assert model.headerData(1, Qt.Vertical, Qt.DisplayRole) == "2"
+    assert model.headerData(2, Qt.Vertical, Qt.DisplayRole) == "3"
 
 
 def test_qt_can_get_row_count_empty():
