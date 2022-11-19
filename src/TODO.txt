@@ -1,0 +1,8 @@
+- allow selecting of excel file
+- handle invalid file/data
+- add attendances when importing
+- save data
+- load data
+- attendances cannot be negative
+    - how does the table know attendances are numbers?
+- add members manually
