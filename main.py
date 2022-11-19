@@ -4,7 +4,7 @@ import sys
 from PyQt5 import uic
 from PyQt5.QtWidgets import QApplication, QHeaderView
 
-from member_model import MemberModel
+from src.member_model import MemberModel
 
 
 def create_gui():
@@ -28,6 +28,7 @@ def create_gui():
         QHeaderView.Interactive
     )
     window.table_members.horizontalHeader().setStretchLastSection(True)
+    window.table_members.resizeColumnsToContents()
     return window
 
 

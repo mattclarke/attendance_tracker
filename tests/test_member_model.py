@@ -1,6 +1,6 @@
 from PyQt5.QtCore import Qt
 
-from member_model import MemberModel
+from src.member_model import MemberModel
 
 
 def test_can_add_row_to_model():
