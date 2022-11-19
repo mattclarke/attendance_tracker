@@ -80,6 +80,16 @@ def test_qt_can_edit_data():
     model = MemberModel(headers=headers)
     model.insert_row()
 
+    model.setData(model.createIndex(0, 1), "Hello", Qt.ItemDataRole.EditRole)
+
+    assert model.data(model.createIndex(0, 1), Qt.ItemDataRole.DisplayRole) == "Hello"
+
+
+def test_qt_cannot_edit_specified_columns():
+    headers = ["column1", "column2", "column3"]
+    model = MemberModel(headers=headers, read_only_cols=[0])
+    model.insert_row()
+
     model.setData(model.createIndex(0, 0), "Hello", Qt.ItemDataRole.EditRole)
 
-    assert model.data(model.createIndex(0, 0), Qt.ItemDataRole.DisplayRole) == "Hello"
+    assert model.data(model.createIndex(0, 0), Qt.ItemDataRole.DisplayRole) == ""

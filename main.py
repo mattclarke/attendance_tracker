@@ -10,7 +10,17 @@ from member_model import MemberModel
 def create_gui():
     basedir = os.path.dirname(__file__)
     window = uic.loadUi(os.path.join(basedir, "mainwindow.ui"))
-    model = MemberModel(["Name", "Birth year", "Grade", "Last graded", "Notes"])
+    model = MemberModel(
+        [
+            "Name",
+            "Birth year",
+            "Grade",
+            "Last graded",
+            "# lessons since grading",
+            "Notes",
+        ],
+        [0, 1],
+    )
     model.insert_row()
     model.insert_row()
     window.table_members.setModel(model)

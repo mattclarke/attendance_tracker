@@ -2,10 +2,11 @@ from PyQt5.QtCore import QAbstractTableModel, Qt
 
 
 class MemberModel(QAbstractTableModel):
-    def __init__(self, headers=None):
+    def __init__(self, headers=None, read_only_cols=None):
         super().__init__()
         self._table_data = []
         self._headers = headers or []
+        self._read_only_cols = read_only_cols or []
 
     @property
     def headers(self):
@@ -34,10 +35,13 @@ class MemberModel(QAbstractTableModel):
             return self._table_data[index.row()][index.column()]
 
     def setData(self, index, value, role):
-        if role != Qt.ItemDataRole.EditRole:
+        if role != Qt.ItemDataRole.EditRole or index.column() in self._read_only_cols:
             return False
         self._table_data[index.row()][index.column()] = value.strip()
         return True
 
     def flags(self, index):
+        if index.column() in self._read_only_cols:
+            return Qt.ItemIsSelectable | Qt.ItemIsEnabled
+
         return Qt.ItemIsSelectable | Qt.ItemIsEnabled | Qt.ItemIsEditable
