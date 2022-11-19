@@ -73,3 +73,13 @@ def test_qt_can_get_data():
 
     assert model.data(model.createIndex(0, 0), Qt.ItemDataRole.DisplayRole) == "one"
     assert model.data(model.createIndex(1, 1), Qt.ItemDataRole.DisplayRole) == "five"
+
+
+def test_qt_can_edit_data():
+    headers = ["column1", "column2", "column3"]
+    model = MemberModel(headers=headers)
+    model.insert_row()
+
+    model.setData(model.createIndex(0, 0), "Hello", Qt.ItemDataRole.EditRole)
+
+    assert model.data(model.createIndex(0, 0), Qt.ItemDataRole.DisplayRole) == "Hello"

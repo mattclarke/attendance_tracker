@@ -32,3 +32,9 @@ class MemberModel(QAbstractTableModel):
     def data(self, index, role):
         if role == Qt.ItemDataRole.DisplayRole or role == Qt.ItemDataRole.EditRole:
             return self._table_data[index.row()][index.column()]
+
+    def setData(self, index, value, role):
+        if role != Qt.ItemDataRole.EditRole:
+            return False
+        self._table_data[index.row()][index.column()] = value.strip()
+        return True
