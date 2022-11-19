@@ -38,3 +38,6 @@ class MemberModel(QAbstractTableModel):
             return False
         self._table_data[index.row()][index.column()] = value.strip()
         return True
+
+    def flags(self, index):
+        return Qt.ItemIsSelectable | Qt.ItemIsEnabled | Qt.ItemIsEditable
