@@ -6,3 +6,5 @@
 - attendances cannot be negative
     - how does the table know attendances are numbers?
 - add members manually
+- make columns sortable
+- copy data to clipboard
