@@ -1,7 +1,9 @@
-from PyQt5.QtCore import QAbstractTableModel, Qt
+from PyQt5.QtCore import QAbstractTableModel, Qt, pyqtSignal
 
 
 class MemberModel(QAbstractTableModel):
+    data_updated = pyqtSignal()
+
     def __init__(self, headers=None, read_only_cols=None):
         super().__init__()
         self._table_data = []
@@ -14,6 +16,8 @@ class MemberModel(QAbstractTableModel):
 
     def insert_row(self):
         self._table_data.append(["" for _ in self._headers])
+        self.layoutChanged.emit()
+        self.data_updated.emit()
 
     def __len__(self):
         return len(self._table_data)
