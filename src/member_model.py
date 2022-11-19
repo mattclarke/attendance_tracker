@@ -41,7 +41,9 @@ class MemberModel(QAbstractTableModel):
     def setData(self, index, value, role):
         if role != Qt.ItemDataRole.EditRole or index.column() in self._read_only_cols:
             return False
-        self._table_data[index.row()][index.column()] = value.strip()
+        self._table_data[index.row()][index.column()] = (
+            value.strip() if isinstance(value, str) else value
+        )
         return True
 
     def flags(self, index):

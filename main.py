@@ -25,7 +25,7 @@ class MainWindow(QMainWindow):
                 "Birth year",
                 "Grade",
                 "Last graded",
-                "# lessons since grading",
+                "# lessons\nsince grading",
                 "Notes",
             ],
             [0, 1],
