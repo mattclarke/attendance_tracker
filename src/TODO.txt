@@ -1,4 +1,5 @@
 - allow selecting of excel file
+    - error handling
 - handle invalid file/data
 - add attendances when importing
 - save data

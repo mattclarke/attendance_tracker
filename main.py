@@ -1,9 +1,14 @@
 import os
-import pathlib
 import sys
 
 from PyQt5 import uic
-from PyQt5.QtWidgets import QApplication, QHeaderView, QMainWindow
+from PyQt5.QtWidgets import (
+    QApplication,
+    QFileDialog,
+    QHeaderView,
+    QMainWindow,
+    QMessageBox,
+)
 
 from src.member_model import MemberModel
 from src.utils import extract_from_excel_file
@@ -38,14 +43,20 @@ class MainWindow(QMainWindow):
         self.table_members.resizeColumnsToContents()
 
     def import_data(self):
-        excel_file = pathlib.Path(__file__).parent / "tests" / "Oversikt_example.xlsx"
-        data = extract_from_excel_file(excel_file)
-        for name, year, num_lessons in data:
-            self.model.insert_row()
-            self.model._table_data[~0][0] = name
-            self.model._table_data[~0][1] = year
-            self.model._table_data[~0][4] = num_lessons
-        self.table_members.resizeColumnsToContents()
+        try:
+            filters = "Excel files (*.xlsx);;All files (*.*)"
+            filename, _ = QFileDialog.getOpenFileName(self, filter=filters)
+            data = extract_from_excel_file(filename)
+            for name, year, num_lessons in data:
+                self.model.insert_row()
+                self.model._table_data[~0][0] = name
+                self.model._table_data[~0][1] = year
+                self.model._table_data[~0][4] = num_lessons
+            self.table_members.resizeColumnsToContents()
+        except Exception as error:
+            QMessageBox.critical(
+                self, "Import Error", f"Could not import data from file: {error}"
+            )
 
 
 if __name__ == "__main__":

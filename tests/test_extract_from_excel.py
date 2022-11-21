@@ -1,5 +1,9 @@
 import pathlib
+from tempfile import TemporaryFile
 
+import pytest
+
+from src.exceptions import InvalidFileException
 from src.utils import extract_from_excel_file
 
 
@@ -28,3 +32,10 @@ def test_can_extract_relevant_data():
     assert extracted_data[6] == ("Peter Brolin", "2012", 0)
     assert extracted_data[7] == ("Mari Sántiago", "1985", 3)
     assert extracted_data[8] == ("Sally Double-Barrelled", "2009", 4)
+
+
+def test_throws_on_invalid_file():
+    with TemporaryFile() as file:
+        file.writelines([b":: line 1 ::", b":: line 2 ::", b":: line 3 ::"])
+        with pytest.raises(InvalidFileException):
+            extract_from_excel_file(file)
