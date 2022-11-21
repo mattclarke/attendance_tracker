@@ -1,6 +1,3 @@
-- allow selecting of excel file
-    - error handling
-- handle invalid file/data
 - add attendances when importing
 - save data
 - load data
@@ -9,3 +6,4 @@
 - add members manually
 - make columns sortable
 - copy data to clipboard
+- fix the model to make it more specific
