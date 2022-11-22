@@ -1,6 +1,6 @@
 from PyQt5.QtCore import Qt
 
-from src.member_model import HEADERS, MemberModel
+from src.member_model import HEADERS, Member, MemberModel
 
 
 def test_can_add_row_to_model():
@@ -26,6 +26,18 @@ def test_can_add_new_members():
     )
     assert model.data(model.createIndex(0, 1), Qt.ItemDataRole.DisplayRole) == "1985"
     assert model.data(model.createIndex(0, 4), Qt.ItemDataRole.DisplayRole) == 12
+
+
+def test_can_get_members():
+    model = MemberModel()
+
+    model.update_member("John Smith", "1985", 12)
+    model.update_member("Jane Doe", "1995", 35)
+
+    members = model.get_members()
+
+    assert members[0] == Member("John Smith", "1985", "", "", 12, "")
+    assert members[1] == Member("Jane Doe", "1995", "", "", 35, "")
 
 
 def test_qt_can_access_headers():

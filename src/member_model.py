@@ -1,3 +1,5 @@
+from dataclasses import dataclass
+
 from PyQt5.QtCore import QAbstractTableModel, Qt, pyqtSignal
 
 HEADERS = [
@@ -8,6 +10,16 @@ HEADERS = [
     "# lessons\nsince grading",
     "Notes",
 ]
+
+
+@dataclass
+class Member:
+    name: str
+    year: str
+    grade: str = ""
+    last_graded: str = ""
+    lessons: int = 0
+    notes: str = ""
 
 
 class MemberModel(QAbstractTableModel):
@@ -22,6 +34,12 @@ class MemberModel(QAbstractTableModel):
     @property
     def headers(self):
         return self._headers[:]
+
+    def get_members(self):
+        result = []
+        for row in self._table_data:
+            result.append(Member(*row[:]))
+        return result
 
     def insert_row(self):
         self._table_data.append(["" for _ in self._headers])
