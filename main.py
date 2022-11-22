@@ -25,14 +25,6 @@ class MainWindow(QMainWindow):
 
     def _initialise_table(self):
         self.model = MemberModel(
-            [
-                "Name",
-                "Birth year",
-                "Grade",
-                "Last graded",
-                "# lessons\nsince grading",
-                "Notes",
-            ],
             [0, 1],
         )
         self.table_members.setModel(self.model)

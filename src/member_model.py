@@ -1,13 +1,22 @@
 from PyQt5.QtCore import QAbstractTableModel, Qt, pyqtSignal
 
+HEADERS = [
+    "Name",
+    "Birth year",
+    "Grade",
+    "Last graded",
+    "# lessons\nsince grading",
+    "Notes",
+]
+
 
 class MemberModel(QAbstractTableModel):
     data_updated = pyqtSignal()
 
-    def __init__(self, headers=None, read_only_cols=None):
+    def __init__(self, read_only_cols=None):
         super().__init__()
         self._table_data = []
-        self._headers = headers or []
+        self._headers = HEADERS
         self._read_only_cols = read_only_cols or []
 
     @property

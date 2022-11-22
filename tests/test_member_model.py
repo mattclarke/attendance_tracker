@@ -1,6 +1,6 @@
 from PyQt5.QtCore import Qt
 
-from src.member_model import MemberModel
+from src.member_model import HEADERS, MemberModel
 
 
 def test_can_add_row_to_model():
@@ -10,29 +10,14 @@ def test_can_add_row_to_model():
     assert len(model) == 1
 
 
-def test_defaults_to_no_headers():
+def test_headers_are_set():
     model = MemberModel()
 
-    assert len(model.headers) == 0
-
-
-def test_can_define_headers():
-    headers = ["column1", "column2", "column3"]
-    model = MemberModel(headers=headers)
-
-    assert model.headers == headers
+    assert model.headers == HEADERS
 
 
 def test_can_add_new_members():
-    headers = [
-        "Name",
-        "Birth year",
-        "Grade",
-        "Last graded",
-        "# lessons\nsince grading",
-        "Notes",
-    ]
-    model = MemberModel(headers=headers)
+    model = MemberModel()
 
     model.update_member("John Smith", "1985", 12)
 
@@ -44,16 +29,16 @@ def test_can_add_new_members():
 
 
 def test_qt_can_access_headers():
-    headers = ["column1", "column2", "column3"]
-    model = MemberModel(headers=headers)
+    model = MemberModel()
 
     model.insert_row()
     model.insert_row()
     model.insert_row()
 
-    assert model.headerData(0, Qt.Horizontal, Qt.DisplayRole) == headers[0]
-    assert model.headerData(1, Qt.Horizontal, Qt.DisplayRole) == headers[1]
-    assert model.headerData(2, Qt.Horizontal, Qt.DisplayRole) == headers[2]
+    assert model.headerData(0, Qt.Horizontal, Qt.DisplayRole) == HEADERS[0]
+    assert model.headerData(1, Qt.Horizontal, Qt.DisplayRole) == HEADERS[1]
+    assert model.headerData(2, Qt.Horizontal, Qt.DisplayRole) == HEADERS[2]
+    assert model.headerData(5, Qt.Horizontal, Qt.DisplayRole) == HEADERS[~0]
 
     assert model.headerData(0, Qt.Vertical, Qt.DisplayRole) == "1"
     assert model.headerData(1, Qt.Vertical, Qt.DisplayRole) == "2"
@@ -61,15 +46,13 @@ def test_qt_can_access_headers():
 
 
 def test_qt_can_get_row_count_empty():
-    headers = ["column1", "column2", "column3"]
-    model = MemberModel(headers=headers)
+    model = MemberModel()
 
     assert model.rowCount() == 0
 
 
 def test_qt_can_get_row_count():
-    headers = ["column1", "column2", "column3"]
-    model = MemberModel(headers=headers)
+    model = MemberModel()
 
     model.insert_row()
     model.insert_row()
@@ -78,15 +61,13 @@ def test_qt_can_get_row_count():
 
 
 def test_qt_can_get_column_count():
-    headers = ["column1", "column2", "column3"]
-    model = MemberModel(headers=headers)
+    model = MemberModel()
 
-    assert model.columnCount() == 3
+    assert model.columnCount() == len(HEADERS)
 
 
 def test_qt_can_get_data():
-    headers = ["column1", "column2", "column3"]
-    model = MemberModel(headers=headers)
+    model = MemberModel()
 
     model._table_data.append(["one", "two", "three"])
     model._table_data.append(["four", "five", "six"])
@@ -96,8 +77,7 @@ def test_qt_can_get_data():
 
 
 def test_qt_can_edit_data():
-    headers = ["column1", "column2", "column3"]
-    model = MemberModel(headers=headers)
+    model = MemberModel()
     model.insert_row()
 
     model.setData(model.createIndex(0, 1), "Hello", Qt.ItemDataRole.EditRole)
@@ -106,8 +86,7 @@ def test_qt_can_edit_data():
 
 
 def test_qt_cannot_edit_specified_columns():
-    headers = ["column1", "column2", "column3"]
-    model = MemberModel(headers=headers, read_only_cols=[0])
+    model = MemberModel(read_only_cols=[0])
     model.insert_row()
 
     model.setData(model.createIndex(0, 0), "Hello", Qt.ItemDataRole.EditRole)
