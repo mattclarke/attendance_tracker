@@ -23,6 +23,26 @@ def test_can_define_headers():
     assert model.headers == headers
 
 
+def test_can_add_new_members():
+    headers = [
+        "Name",
+        "Birth year",
+        "Grade",
+        "Last graded",
+        "# lessons\nsince grading",
+        "Notes",
+    ]
+    model = MemberModel(headers=headers)
+
+    model.update_member("John Smith", "1985", 12)
+
+    assert (
+        model.data(model.createIndex(0, 0), Qt.ItemDataRole.DisplayRole) == "John Smith"
+    )
+    assert model.data(model.createIndex(0, 1), Qt.ItemDataRole.DisplayRole) == "1985"
+    assert model.data(model.createIndex(0, 4), Qt.ItemDataRole.DisplayRole) == 12
+
+
 def test_qt_can_access_headers():
     headers = ["column1", "column2", "column3"]
     model = MemberModel(headers=headers)

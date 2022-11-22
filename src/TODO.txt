@@ -5,5 +5,6 @@
     - how does the table know attendances are numbers?
 - add members manually
 - make columns sortable
+    - QSortFilterProxyModel?
 - copy data to clipboard
-- fix the model to make it more specific
+- fix the model to make it more user friendly

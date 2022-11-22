@@ -22,6 +22,16 @@ class MemberModel(QAbstractTableModel):
     def __len__(self):
         return len(self._table_data)
 
+    def update_member(self, name, year, num_lessons):
+        self._table_data.append(["" for _ in self._headers])
+        self._table_data[~0][0] = name
+        self._table_data[~0][1] = year
+        self._table_data[~0][4] = num_lessons
+        self.layoutChanged.emit()
+        self.data_updated.emit()
+
+    # Qt model API - do not use directly from outside
+
     def headerData(self, section, orientation=None, role=None):
         if role == Qt.DisplayRole and orientation == Qt.Horizontal:
             return self._headers[section]
@@ -49,5 +59,4 @@ class MemberModel(QAbstractTableModel):
     def flags(self, index):
         if index.column() in self._read_only_cols:
             return Qt.ItemIsSelectable | Qt.ItemIsEnabled
-
         return Qt.ItemIsSelectable | Qt.ItemIsEnabled | Qt.ItemIsEditable
