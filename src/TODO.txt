@@ -1,4 +1,5 @@
 - add attendances when importing
+- map Member to rowdata
 - save data
 - load data
 - attendances cannot be negative
