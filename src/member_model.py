@@ -5,6 +5,7 @@ from PyQt5.QtCore import QAbstractTableModel, Qt, pyqtSignal
 HEADERS = [
     "Name",
     "Birth year",
+    "Gender",
     "Grade",
     "Last graded",
     "# lessons\nsince grading",
@@ -16,6 +17,7 @@ HEADERS = [
 class Member:
     name: str
     year: str
+    gender: str
     grade: str = ""
     last_graded: str = ""
     lessons: int = 0
@@ -53,7 +55,7 @@ class MemberModel(QAbstractTableModel):
         self._table_data.append(["" for _ in self._headers])
         self._table_data[~0][0] = name
         self._table_data[~0][1] = year
-        self._table_data[~0][4] = num_lessons
+        self._table_data[~0][5] = num_lessons
         self.layoutChanged.emit()
         self.data_updated.emit()
 
