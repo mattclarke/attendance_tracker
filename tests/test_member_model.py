@@ -25,7 +25,7 @@ def test_can_add_new_members():
         model.data(model.createIndex(0, 0), Qt.ItemDataRole.DisplayRole) == "John Smith"
     )
     assert model.data(model.createIndex(0, 1), Qt.ItemDataRole.DisplayRole) == "1985"
-    assert model.data(model.createIndex(0, 4), Qt.ItemDataRole.DisplayRole) == 12
+    assert model.data(model.createIndex(0, 5), Qt.ItemDataRole.DisplayRole) == 12
 
 
 def test_can_get_members():
@@ -36,8 +36,8 @@ def test_can_get_members():
 
     members = model.get_members()
 
-    assert members[0] == Member("John Smith", "1985", "", "", 12, "")
-    assert members[1] == Member("Jane Doe", "1995", "", "", 35, "")
+    assert members[0] == Member("John Smith", "1985", "", "", "", 12, "")
+    assert members[1] == Member("Jane Doe", "1995", "", "", "", 35, "")
 
 
 def test_qt_can_access_headers():
@@ -51,10 +51,6 @@ def test_qt_can_access_headers():
     assert model.headerData(1, Qt.Horizontal, Qt.DisplayRole) == HEADERS[1]
     assert model.headerData(2, Qt.Horizontal, Qt.DisplayRole) == HEADERS[2]
     assert model.headerData(6, Qt.Horizontal, Qt.DisplayRole) == HEADERS[~0]
-
-    assert model.headerData(0, Qt.Vertical, Qt.DisplayRole) == "1"
-    assert model.headerData(1, Qt.Vertical, Qt.DisplayRole) == "2"
-    assert model.headerData(2, Qt.Vertical, Qt.DisplayRole) == "3"
 
 
 def test_qt_can_get_row_count_empty():

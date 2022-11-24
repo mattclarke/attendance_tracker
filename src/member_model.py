@@ -65,7 +65,7 @@ class MemberModel(QAbstractTableModel):
         if role == Qt.DisplayRole and orientation == Qt.Horizontal:
             return self._headers[section]
         if role == Qt.DisplayRole and orientation == Qt.Vertical:
-            return f"{section + 1}"
+            return ""
 
     def rowCount(self, index=None):
         return len(self._table_data)
