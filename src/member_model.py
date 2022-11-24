@@ -51,11 +51,12 @@ class MemberModel(QAbstractTableModel):
     def __len__(self):
         return len(self._table_data)
 
-    def update_member(self, name, year, num_lessons):
-        self._table_data.append(["" for _ in self._headers])
-        self._table_data[~0][0] = name
-        self._table_data[~0][1] = year
-        self._table_data[~0][5] = num_lessons
+    def update_members(self, members):
+        for name, year, num_lessons in members:
+            self._table_data.append(["" for _ in self._headers])
+            self._table_data[~0][0] = name
+            self._table_data[~0][1] = year
+            self._table_data[~0][5] = num_lessons
         self.layoutChanged.emit()
         self.data_updated.emit()
 

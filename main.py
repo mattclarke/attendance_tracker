@@ -45,8 +45,7 @@ class MainWindow(QMainWindow):
             filters = "Excel files (*.xlsx);;All files (*.*)"
             filename, _ = QFileDialog.getOpenFileName(self, filter=filters)
             data = extract_from_excel_file(filename)
-            for name, year, num_lessons in data:
-                self.model.update_member(name, year, num_lessons)
+            self.model.update_members(data)
             self.table_members.resizeColumnsToContents()
         except Exception as error:
             QMessageBox.critical(
