@@ -106,5 +106,19 @@ def test_qt_cannot_edit_specified_columns():
     assert model.data(model.createIndex(0, 0), Qt.ItemDataRole.DisplayRole) == "Adam"
 
 
+def test_editing_value_updates_member():
+    model = MemberModel()
+    model.update_members(
+        [("Adam", "1977", 5), ("Bea", "1987", 15), ("Carlo", "1997", 25)]
+    )
+
+    model.setData(model.createIndex(0, 0), "Aadam", Qt.ItemDataRole.EditRole)
+    model.setData(model.createIndex(0, 5), 123, Qt.ItemDataRole.EditRole)
+    members = model.get_members()
+
+    assert members[0].name == "Aadam"
+    assert members[0].lessons == 123
+
+
 def test_when_updating_it_returns_new_members():
     pass

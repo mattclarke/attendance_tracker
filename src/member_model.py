@@ -1,3 +1,4 @@
+import copy
 from dataclasses import dataclass
 
 from PyQt5.QtCore import QAbstractTableModel, Qt, pyqtSignal
@@ -12,12 +13,15 @@ HEADERS = [
     "Notes",
 ]
 
+# Must match the names in the Member class and the order in HEADERS
+MAPPING = ["name", "year", "gender", "grade", "last_graded", "lessons", "notes"]
+
 
 @dataclass
 class Member:
     name: str
     year: str
-    gender: str
+    gender: str = ""
     grade: str = ""
     last_graded: str = ""
     lessons: int = 0
@@ -30,6 +34,7 @@ class MemberModel(QAbstractTableModel):
     def __init__(self, read_only_cols=None):
         super().__init__()
         self._table_data = []
+        self._members = []
         self._headers = HEADERS
         self._read_only_cols = read_only_cols or []
 
@@ -38,10 +43,7 @@ class MemberModel(QAbstractTableModel):
         return self._headers[:]
 
     def get_members(self):
-        result = []
-        for row in self._table_data:
-            result.append(Member(*row[:]))
-        return result
+        return copy.deepcopy(self._members)
 
     def insert_row(self):
         self._table_data.append(["" for _ in self._headers])
@@ -57,6 +59,7 @@ class MemberModel(QAbstractTableModel):
             self._table_data[~0][0] = name
             self._table_data[~0][1] = year
             self._table_data[~0][5] = num_lessons
+            self._members.append(Member(name, year, lessons=num_lessons))
         self.layoutChanged.emit()
         self.data_updated.emit()
 
@@ -81,9 +84,9 @@ class MemberModel(QAbstractTableModel):
     def setData(self, index, value, role):
         if role != Qt.ItemDataRole.EditRole or index.column() in self._read_only_cols:
             return False
-        self._table_data[index.row()][index.column()] = (
-            value.strip() if isinstance(value, str) else value
-        )
+        value = value.strip() if isinstance(value, str) else value
+        self._table_data[index.row()][index.column()] = value
+        setattr(self._members[index.row()], MAPPING[index.column()], value)
         return True
 
     def flags(self, index):
