@@ -8,3 +8,12 @@
 - copy data to clipboard
 - fix the model to make it more user friendly
 - show when new members found
+- gender (somewhat sensitive - do we really need it?)
+- store grading history (it was suggested that it can go in the notes)
+- some sort of indication if the number of lessons has exceeded what is required
+- indicate if not trained in a while (if is 0 in recent attendance)
+    - column for num lessons in period
+    - allow hiding of inactive members
+- combo for grade
+- how to do dates?
+- tests to ensure headers, mappings and member values align
