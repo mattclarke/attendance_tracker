@@ -1,15 +1,7 @@
 from PyQt5.QtCore import Qt
 
 from src.member_model import MemberModel
-
-
-def convert_table_to_clipboard_format(model):
-    rows = []
-    for row in model.table_data:
-        row_str = [str(value) for value in row]
-        if any(row_str):
-            rows.append(row_str)
-    return "\n".join(["\t".join(row) for row in rows])
+from src.utils import convert_table_to_clipboard_format
 
 
 def test_can_copy_table_data_to_clipboard():

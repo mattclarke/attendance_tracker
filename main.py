@@ -12,7 +12,7 @@ from PyQt5.QtWidgets import (
 )
 
 from src.member_model import MemberModel
-from src.utils import extract_from_excel_file
+from src.utils import convert_table_to_clipboard_format, extract_from_excel_file
 
 basedir = os.path.dirname(__file__)
 
@@ -21,6 +21,7 @@ class MainWindow(QMainWindow):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         uic.loadUi(os.path.join(basedir, "mainwindow.ui"), self)
+        self.clipboard = QApplication.instance().clipboard()
         self.btn_import.clicked.connect(self.import_data)
         self.btn_test.clicked.connect(self.foo)
         self._initialise_table()
@@ -53,8 +54,8 @@ class MainWindow(QMainWindow):
             )
 
     def foo(self):
-        for m in self.model._table_data:
-            print(m)
+        result = convert_table_to_clipboard_format(self.model)
+        self.clipboard.setText(result)
 
 
 if __name__ == "__main__":
