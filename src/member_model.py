@@ -45,6 +45,10 @@ class MemberModel(QAbstractTableModel):
     def get_members(self):
         return copy.deepcopy(self._members)
 
+    @property
+    def table_data(self):
+        return self._table_data[:]
+
     def insert_row(self):
         self._table_data.append(["" for _ in self._headers])
         self.layoutChanged.emit()
