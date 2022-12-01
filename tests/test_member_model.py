@@ -1,4 +1,4 @@
-from PyQt5.QtCore import Qt
+from PyQt6.QtCore import Qt
 
 from src.member_model import HEADERS, Member, MemberModel
 
@@ -36,8 +36,12 @@ def test_can_get_members():
 
     members = model.get_members()
 
-    assert members[0] == Member("John Smith", "1985", "", "", "", 12, "")
-    assert members[1] == Member("Jane Doe", "1995", "", "", "", 35, "")
+    assert members[("John Smith", "1985")] == Member(
+        "John Smith", "1985", "", "", "", 12, ""
+    )
+    assert members[("Jane Doe", "1995")] == Member(
+        "Jane Doe", "1995", "", "", "", 35, ""
+    )
 
 
 def test_qt_can_access_headers():
@@ -47,10 +51,22 @@ def test_qt_can_access_headers():
         [("Adam", "1977", 5), ("Bea", "1987", 15), ("Carlo", "1997", 25)]
     )
 
-    assert model.headerData(0, Qt.Horizontal, Qt.DisplayRole) == HEADERS[0]
-    assert model.headerData(1, Qt.Horizontal, Qt.DisplayRole) == HEADERS[1]
-    assert model.headerData(2, Qt.Horizontal, Qt.DisplayRole) == HEADERS[2]
-    assert model.headerData(6, Qt.Horizontal, Qt.DisplayRole) == HEADERS[~0]
+    assert (
+        model.headerData(0, Qt.Orientation.Horizontal, Qt.ItemDataRole.DisplayRole)
+        == HEADERS[0]
+    )
+    assert (
+        model.headerData(1, Qt.Orientation.Horizontal, Qt.ItemDataRole.DisplayRole)
+        == HEADERS[1]
+    )
+    assert (
+        model.headerData(2, Qt.Orientation.Horizontal, Qt.ItemDataRole.DisplayRole)
+        == HEADERS[2]
+    )
+    assert (
+        model.headerData(6, Qt.Orientation.Horizontal, Qt.ItemDataRole.DisplayRole)
+        == HEADERS[~0]
+    )
 
 
 def test_qt_can_get_row_count_empty():
@@ -92,9 +108,9 @@ def test_qt_can_edit_data():
         [("Adam", "1977", 5), ("Bea", "1987", 15), ("Carlo", "1997", 25)]
     )
 
-    model.setData(model.createIndex(0, 0), "Aadam", Qt.ItemDataRole.EditRole)
+    model.setData(model.createIndex(0, 5), 123, Qt.ItemDataRole.EditRole)
 
-    assert model.data(model.createIndex(0, 0), Qt.ItemDataRole.DisplayRole) == "Aadam"
+    assert model.data(model.createIndex(0, 5), Qt.ItemDataRole.DisplayRole) == 123
 
 
 def test_qt_cannot_edit_specified_columns():
@@ -112,12 +128,22 @@ def test_editing_value_updates_member():
         [("Adam", "1977", 5), ("Bea", "1987", 15), ("Carlo", "1997", 25)]
     )
 
-    model.setData(model.createIndex(0, 0), "Aadam", Qt.ItemDataRole.EditRole)
     model.setData(model.createIndex(0, 5), 123, Qt.ItemDataRole.EditRole)
-    members = model.get_members()
 
-    assert members[0].name == "Aadam"
-    assert members[0].lessons == 123
+    assert model.members[("Adam", "1977")].lessons == 123
+
+
+def test_updating_members_with_existing_member_increments_lessons():
+    model = MemberModel()
+    model.update_members(
+        [("Adam", "1977", 5), ("Bea", "1987", 15), ("Carlo", "1997", 25)]
+    )
+
+    model.update_members([("Adam", "1977", 2)])
+
+    assert model.members[("Adam", "1977")].lessons == 7
+    assert len(model.table_data) == 3
+    assert model.table_data[0][5] == 7
 
 
 def test_when_updating_it_returns_new_members():

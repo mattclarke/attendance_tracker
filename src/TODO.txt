@@ -17,3 +17,5 @@
 - combo for grade
 - how to do dates?
 - tests to ensure headers, mappings and member values align
+- what happens if a person appears twice in the spreadsheet? (E.g. Thalea in the most recent one)
+- handle no file selected gracefully

@@ -22,6 +22,7 @@ def extract_from_excel_file(excel_file):
 
             results.append((name, year, attendance))
             index += 1
+        wb.close()
         return results
     except Exception as error:
         raise InvalidFileException(str(error))

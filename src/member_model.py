@@ -1,7 +1,7 @@
 import copy
 from dataclasses import dataclass
 
-from PyQt5.QtCore import QAbstractTableModel, Qt, pyqtSignal
+from PyQt6.QtCore import QAbstractTableModel, Qt, pyqtSignal
 
 HEADERS = [
     "Name",
@@ -34,7 +34,7 @@ class MemberModel(QAbstractTableModel):
     def __init__(self, read_only_cols=None):
         super().__init__()
         self._table_data = []
-        self._members = []
+        self._members = {}
         self._headers = HEADERS
         self._read_only_cols = read_only_cols or []
 
@@ -49,6 +49,10 @@ class MemberModel(QAbstractTableModel):
     def table_data(self):
         return self._table_data[:]
 
+    @property
+    def members(self):
+        return copy.deepcopy(self._members)
+
     def insert_row(self):
         self._table_data.append(["" for _ in self._headers])
         self.layoutChanged.emit()
@@ -59,20 +63,30 @@ class MemberModel(QAbstractTableModel):
 
     def update_members(self, members):
         for name, year, num_lessons in members:
-            self._table_data.append(["" for _ in self._headers])
-            self._table_data[~0][0] = name
-            self._table_data[~0][1] = year
-            self._table_data[~0][5] = num_lessons
-            self._members.append(Member(name, year, lessons=num_lessons))
-        self.layoutChanged.emit()
-        self.data_updated.emit()
+            member = self._members.get((name, year), Member(name, year))
+            member.lessons += num_lessons
+            self._members[(name, year)] = member
+
+        self.beginResetModel()
+        self._table_data = [["" for _ in self.headers] for _ in self._members]
+        for r, member in enumerate(self._members.values()):
+            for c, m in enumerate(MAPPING):
+                self._table_data[r][c] = getattr(member, m)
+
+        self.endResetModel()
 
     # Qt model API - do not use directly from outside
 
     def headerData(self, section, orientation=None, role=None):
-        if role == Qt.DisplayRole and orientation == Qt.Horizontal:
+        if (
+            role == Qt.ItemDataRole.DisplayRole
+            and orientation == Qt.Orientation.Horizontal
+        ):
             return self._headers[section]
-        if role == Qt.DisplayRole and orientation == Qt.Vertical:
+        if (
+            role == Qt.ItemDataRole.DisplayRole
+            and orientation == Qt.Orientation.Vertical
+        ):
             return ""
 
     def rowCount(self, index=None):
@@ -90,10 +104,15 @@ class MemberModel(QAbstractTableModel):
             return False
         value = value.strip() if isinstance(value, str) else value
         self._table_data[index.row()][index.column()] = value
-        setattr(self._members[index.row()], MAPPING[index.column()], value)
+        key = (self._table_data[index.row()][0], self._table_data[index.row()][1])
+        setattr(self._members[key], MAPPING[index.column()], value)
         return True
 
     def flags(self, index):
         if index.column() in self._read_only_cols:
-            return Qt.ItemIsSelectable | Qt.ItemIsEnabled
-        return Qt.ItemIsSelectable | Qt.ItemIsEnabled | Qt.ItemIsEditable
+            return Qt.ItemFlag.ItemIsSelectable | Qt.ItemFlag.ItemIsEnabled
+        return (
+            Qt.ItemFlag.ItemIsSelectable
+            | Qt.ItemFlag.ItemIsEnabled
+            | Qt.ItemFlag.ItemIsEditable
+        )

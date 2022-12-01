@@ -1,9 +1,9 @@
 import os
 import sys
 
-from PyQt5 import uic
-from PyQt5.QtCore import QSortFilterProxyModel, Qt
-from PyQt5.QtWidgets import (
+from PyQt6 import uic
+from PyQt6.QtCore import QSortFilterProxyModel, Qt
+from PyQt6.QtWidgets import (
     QApplication,
     QFileDialog,
     QHeaderView,
@@ -34,17 +34,21 @@ class MainWindow(QMainWindow):
         proxy_model.setSourceModel(self.model)
         self.table_members.setModel(proxy_model)
         self.table_members.horizontalHeader().setSectionResizeMode(
-            QHeaderView.Interactive
+            QHeaderView.ResizeMode.Interactive
         )
         self.table_members.horizontalHeader().setStretchLastSection(True)
         self.table_members.resizeColumnsToContents()
-        self.table_members.horizontalHeader().setSortIndicator(0, Qt.AscendingOrder)
+        self.table_members.horizontalHeader().setSortIndicator(
+            0, Qt.SortOrder.AscendingOrder
+        )
         self.table_members.setSortingEnabled(True)
 
     def import_data(self):
         try:
             filters = "Excel files (*.xlsx);;All files (*.*)"
-            filename, _ = QFileDialog.getOpenFileName(self, filter=filters)
+            filename, _ = QFileDialog.getOpenFileName(
+                self, caption="Select Excel file", filter=filters
+            )
             data = extract_from_excel_file(filename)
             self.model.update_members(data)
             self.table_members.resizeColumnsToContents()
@@ -63,4 +67,4 @@ if __name__ == "__main__":
     app = QApplication(sys.argv)
     window = MainWindow()
     window.show()
-    app.exec_()
+    app.exec()
