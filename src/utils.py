@@ -44,7 +44,7 @@ class Converter:
     @staticmethod
     def to_json(members):
         as_dicts = [m.as_dict() for m in members]
-        return json.dumps(as_dicts)
+        return json.dumps(as_dicts, ensure_ascii=False, indent=4)
 
     @staticmethod
     def from_json(data):

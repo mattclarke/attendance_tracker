@@ -12,7 +12,7 @@ from PyQt6.QtWidgets import (
 )
 
 from src.member_model import MemberModel
-from src.utils import convert_table_to_clipboard_format, extract_from_excel_file
+from src.utils import Converter, extract_from_excel_file
 
 basedir = os.path.dirname(__file__)
 
@@ -59,8 +59,23 @@ class MainWindow(QMainWindow):
             )
 
     def foo(self):
-        result = convert_table_to_clipboard_format(self.model)
-        self.clipboard.setText(result)
+        self.save()
+
+    def save(self):
+        try:
+            filters = "JSON file (*.json);;All files (*.*)"
+            default = "JSON file (*.json)"
+            filename, _ = QFileDialog.getSaveFileName(
+                self, caption="Save file", initialFilter=default, filter=filters
+            )
+            if filename:
+                as_json = Converter.to_json(list(self.model.members.values()))
+                with open(filename, "w") as file:
+                    file.write(as_json)
+        except Exception as error:
+            QMessageBox.critical(
+                self, "Save Error", f"Could not save data to file: {error}"
+            )
 
 
 if __name__ == "__main__":

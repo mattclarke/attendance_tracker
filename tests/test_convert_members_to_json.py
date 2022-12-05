@@ -4,7 +4,7 @@ from src.utils import Converter
 
 def test_can_convert_to_and_from_json():
     members = [
-        Member("Adam", "1995", grade="kyu 4", last_graded="5/12/22", lessons=123)
+        Member("Adäm", "1995", grade="kyu 4", last_graded="5/12/22", lessons=123)
     ]
 
     as_json = Converter.to_json(members)
