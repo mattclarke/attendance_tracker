@@ -12,5 +12,5 @@ def test_can_copy_table_data_to_clipboard():
 
     assert (
         result
-        == "Adam\t1977\t\t\t\t5\t\nBea\t1987\t\t\t\t15\t\nCarlo\t1997\t\t\t\t25\t"
+        == "Adam\t1977\t\t\t\t5\t5\t\nBea\t1987\t\t\t\t15\t15\t\nCarlo\t1997\t\t\t\t25\t25\t"
     )

@@ -31,14 +31,13 @@ def test_can_add_new_members():
 def test_can_get_members():
     model = MemberModel()
 
-    model.update_members([("John Smith", "1985", 12)])
-    model.update_members([("Jane Doe", "1995", 35)])
+    model.update_members([("John Smith", "1985", 12), ("Jane Doe", "1995", 35)])
 
     assert model.members[("John Smith", "1985")] == Member(
-        "John Smith", "1985", "", "", "", 12, ""
+        "John Smith", "1985", "", "", "", 12, 12, ""
     )
     assert model.members[("Jane Doe", "1995")] == Member(
-        "Jane Doe", "1995", "", "", "", 35, ""
+        "Jane Doe", "1995", "", "", "", 35, 35, ""
     )
 
 
@@ -62,7 +61,7 @@ def test_qt_can_access_headers():
         == HEADERS[2]
     )
     assert (
-        model.headerData(6, Qt.Orientation.Horizontal, Qt.ItemDataRole.DisplayRole)
+        model.headerData(7, Qt.Orientation.Horizontal, Qt.ItemDataRole.DisplayRole)
         == HEADERS[~0]
     )
 
@@ -169,3 +168,15 @@ def test_when_updating_it_returns_new_members():
     assert len(new_members) == 2
     assert "Bea (1987)" in new_members
     assert "Carlo (1997)" in new_members
+
+
+def test_when_updating_it_updates_the_period():
+    model = MemberModel()
+    model.update_members(
+        [("Adam", "1977", 5), ("Bea", "1987", 15), ("Carlo", "1997", 25)]
+    )
+
+    model.update_members([("Adam", "1977", 45), ("Bea", "1987", 25)])
+
+    assert model.members[("Adam", "1977")].period == 45
+    assert model.members[("Bea", "1987")].period == 25

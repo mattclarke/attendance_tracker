@@ -53,10 +53,13 @@ class MainWindow(QMainWindow):
                 data = extract_from_excel_file(filename)
                 new_members = self.model.update_members(data)
                 self.table_members.resizeColumnsToContents()
-                as_str = "\n\t".join(new_members)
-                QMessageBox.information(
-                    self, "New members", f"Found the following new members:\n\t{as_str}"
-                )
+                if new_members:
+                    as_str = "\n\t".join(new_members)
+                    QMessageBox.information(
+                        self,
+                        "New members",
+                        f"Found the following new members:\n\t{as_str}",
+                    )
         except Exception as error:
             QMessageBox.critical(
                 self, "Import Error", f"Could not import data from file: {error}"

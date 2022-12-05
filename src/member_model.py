@@ -10,11 +10,21 @@ HEADERS = [
     "Grade",
     "Last graded",
     "# lessons\nsince grading",
+    "# lessons\nthis period",
     "Notes",
 ]
 
 # Must match the names in the Member class and the order in HEADERS
-MAPPING = ["name", "year", "gender", "grade", "last_graded", "lessons", "notes"]
+MAPPING = [
+    "name",
+    "year",
+    "gender",
+    "grade",
+    "last_graded",
+    "lessons",
+    "period",
+    "notes",
+]
 
 
 @dataclass
@@ -25,6 +35,7 @@ class Member:
     grade: str = ""
     last_graded: str = ""
     lessons: int = 0
+    period: int = 0
     notes: str = ""
 
     def as_dict(self):
@@ -74,6 +85,9 @@ class MemberModel(QAbstractTableModel):
         return len(self._table_data)
 
     def update_members(self, members):
+        for member in self._members.values():
+            member.period = 0
+
         new_members = []
         for name, year, num_lessons in members:
             member = self._members.get((name, year), None)
@@ -81,6 +95,7 @@ class MemberModel(QAbstractTableModel):
                 member = Member(name, year)
                 new_members.append(f"{name} ({year})")
             member.lessons += num_lessons
+            member.period = num_lessons
             self._members[(name, year)] = member
 
         self.beginResetModel()
