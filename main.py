@@ -49,9 +49,10 @@ class MainWindow(QMainWindow):
             filename, _ = QFileDialog.getOpenFileName(
                 self, caption="Select Excel file", filter=filters
             )
-            data = extract_from_excel_file(filename)
-            self.model.update_members(data)
-            self.table_members.resizeColumnsToContents()
+            if filename:
+                data = extract_from_excel_file(filename)
+                self.model.update_members(data)
+                self.table_members.resizeColumnsToContents()
         except Exception as error:
             QMessageBox.critical(
                 self, "Import Error", f"Could not import data from file: {error}"

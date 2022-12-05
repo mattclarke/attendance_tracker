@@ -1,5 +1,8 @@
 __pycache__/
 
+# Virtual env
+venv/
+
 # IDEs
 .idea/
 .vscode/

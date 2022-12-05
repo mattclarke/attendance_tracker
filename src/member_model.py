@@ -1,5 +1,5 @@
 import copy
-from dataclasses import dataclass
+from dataclasses import asdict, dataclass
 
 from PyQt6.QtCore import QAbstractTableModel, Qt, pyqtSignal
 
@@ -26,6 +26,9 @@ class Member:
     last_graded: str = ""
     lessons: int = 0
     notes: str = ""
+
+    def as_dict(self):
+        return asdict(self)
 
 
 class MemberModel(QAbstractTableModel):
