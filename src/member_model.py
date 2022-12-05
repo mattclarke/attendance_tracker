@@ -45,9 +45,6 @@ class MemberModel(QAbstractTableModel):
     def headers(self):
         return self._headers[:]
 
-    def get_members(self):
-        return copy.deepcopy(self._members)
-
     @property
     def table_data(self):
         return self._table_data[:]
@@ -55,6 +52,18 @@ class MemberModel(QAbstractTableModel):
     @property
     def members(self):
         return copy.deepcopy(self._members)
+
+    def replace_data(self, new_data):
+        self._members.clear()
+        for member in new_data:
+            self._members[(member.name, member.year)] = member
+
+        self.beginResetModel()
+        self._table_data = [["" for _ in self.headers] for _ in self._members]
+        for r, member in enumerate(self._members.values()):
+            for c, m in enumerate(MAPPING):
+                self._table_data[r][c] = getattr(member, m)
+        self.endResetModel()
 
     def insert_row(self):
         self._table_data.append(["" for _ in self._headers])
@@ -75,7 +84,6 @@ class MemberModel(QAbstractTableModel):
         for r, member in enumerate(self._members.values()):
             for c, m in enumerate(MAPPING):
                 self._table_data[r][c] = getattr(member, m)
-
         self.endResetModel()
 
     # Qt model API - do not use directly from outside

@@ -34,12 +34,10 @@ def test_can_get_members():
     model.update_members([("John Smith", "1985", 12)])
     model.update_members([("Jane Doe", "1995", 35)])
 
-    members = model.get_members()
-
-    assert members[("John Smith", "1985")] == Member(
+    assert model.members[("John Smith", "1985")] == Member(
         "John Smith", "1985", "", "", "", 12, ""
     )
-    assert members[("Jane Doe", "1995")] == Member(
+    assert model.members[("Jane Doe", "1995")] == Member(
         "Jane Doe", "1995", "", "", "", 35, ""
     )
 
@@ -144,6 +142,20 @@ def test_updating_members_with_existing_member_increments_lessons():
     assert model.members[("Adam", "1977")].lessons == 7
     assert len(model.table_data) == 3
     assert model.table_data[0][5] == 7
+
+
+def test_can_replace_data():
+    model = MemberModel()
+    model.update_members(
+        [("Adam", "1977", 5), ("Bea", "1987", 15), ("Carlo", "1997", 25)]
+    )
+
+    members = [Member("John", "1975", lessons=123), Member("Jane", "1985", lessons=234)]
+    model.replace_data(members)
+
+    assert len(model.members) == 2
+    assert ("John", "1975") in model.members
+    assert ("Jane", "1985") in model.members
 
 
 def test_when_updating_it_returns_new_members():

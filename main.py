@@ -59,7 +59,24 @@ class MainWindow(QMainWindow):
             )
 
     def foo(self):
-        self.save()
+        self.load()
+
+    def load(self):
+        try:
+            filters = "JSON file (*.json);;All files (*.*)"
+            default = "JSON file (*.json)"
+            filename, _ = QFileDialog.getOpenFileName(
+                self, caption="Select data file", filter=filters, initialFilter=default
+            )
+            if filename:
+                with open(filename, "r") as file:
+                    data = Converter.from_json(file.read())
+                self.model.replace_data(data)
+                self.table_members.resizeColumnsToContents()
+        except Exception as error:
+            QMessageBox.critical(
+                self, "Load Error", f"Could not load data from file: {error}"
+            )
 
     def save(self):
         try:
