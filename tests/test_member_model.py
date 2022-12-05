@@ -159,4 +159,13 @@ def test_can_replace_data():
 
 
 def test_when_updating_it_returns_new_members():
-    pass
+    model = MemberModel()
+    model.update_members([("Adam", "1977", 5)])
+
+    new_members = model.update_members(
+        [("Adam", "1977", 5), ("Bea", "1987", 15), ("Carlo", "1997", 25)]
+    )
+
+    assert len(new_members) == 2
+    assert "Bea (1987)" in new_members
+    assert "Carlo (1997)" in new_members

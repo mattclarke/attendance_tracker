@@ -74,8 +74,12 @@ class MemberModel(QAbstractTableModel):
         return len(self._table_data)
 
     def update_members(self, members):
+        new_members = []
         for name, year, num_lessons in members:
-            member = self._members.get((name, year), Member(name, year))
+            member = self._members.get((name, year), None)
+            if not member:
+                member = Member(name, year)
+                new_members.append(f"{name} ({year})")
             member.lessons += num_lessons
             self._members[(name, year)] = member
 
@@ -85,6 +89,7 @@ class MemberModel(QAbstractTableModel):
             for c, m in enumerate(MAPPING):
                 self._table_data[r][c] = getattr(member, m)
         self.endResetModel()
+        return new_members
 
     # Qt model API - do not use directly from outside
 
